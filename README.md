@@ -1,3 +1,4 @@
 # E-Comm App
 
-##  A simple ecommerce app made with vanilla JS
+##  Overview
+A simple ecommerce app made with vanilla JS
