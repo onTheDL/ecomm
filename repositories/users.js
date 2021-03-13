@@ -1,4 +1,5 @@
 const fs = require("fs");
+const crypto = require('crypto')
 
 class UsersRepository {
   // N.B. constructors are not allowed to be asyncronous
@@ -19,18 +20,39 @@ class UsersRepository {
 
   async getAll() {
     // Open the file called this.filename
-    return JSON.parse(await fs.promises.readFile(this.filename, {
-      encoding: "utf8",
-    }));
+    return JSON.parse(
+      await fs.promises.readFile(this.filename, {
+        encoding: "utf8",
+      })
+    );
+  }
+  // attr = attributes
+  async create(attrs) {
+    attrs.id = this.randomId()
+
+    const records = await this.getAll()
+    records.push(attrs)
+
+    await this.writeAll(records)
+  }
+
+  async writeAll(records) {
+    await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2))
+  }
+
+  randomId() {
+    return crypto.randomBytes(4).toString('hex')
   }
 }
 
 const test = async () => {
-  const repo = new UsersRepository('user.json')
+  const repo = new UsersRepository("users.json");
 
-  const users = await repo.getAll()
+  await repo.create({ email: 'test@test.com', password: 'password' })
 
-  console.log(users)
-}
+  const users = await repo.getAll();
 
-test()
+  console.log(users);
+};
+
+test();
