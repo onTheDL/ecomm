@@ -40,7 +40,7 @@ class UsersRepository {
     const records = await this.getAll();
     const record = {
       ...attrs,
-      password: `${buf.toString("hex")}.${salt}`,
+      password: `${buf.toString("hex")}.${salt}`
     };
     records.push(record);
 
@@ -60,7 +60,7 @@ class UsersRepository {
     const [hashed, salt] = saved.split(".");
     const hashedSuppliedBuf = await scrypt(supplied, salt, 64);
 
-    return hashed === hashedSuppliedBuf.toString('hex')
+    return hashed === hashedSuppliedBuf.toString("hex");
   }
 
   async writeAll(records) {
