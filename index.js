@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser"); // a middleware fxn
 const cookieSession = require("cookie-session"); // a middleware fxn
 const authedRouter = require("./routes/admin/auth");
+const productsRouter = require("./routes/admin/products");
 
 // Describes what our web servers can do
 const app = express();
@@ -17,6 +18,7 @@ app.use(
 );
 
 app.use(authedRouter);
+app.use(productsRouter);
 
 app.listen(3000, () => {
   console.log("Listening");
