@@ -7,8 +7,9 @@ const productsNewTemplate = require("../../views/admin/products/new");
 const { requireTitle, requirePrice } = require("./validators");
 
 const router = express.Router();
-router.get("/admin/products", (req, res) => {});
 const upload = multer({ storage: multer.memoryStorage() });
+
+router.get("/admin/products", (req, res) => {});
 
 router.get("/admin/products/new", (req, res) => {
   res.send(productsNewTemplate({}));
@@ -16,12 +17,24 @@ router.get("/admin/products/new", (req, res) => {
 
 router.post(
   "/admin/products/new",
-  [requireTitle, requirePrice],
+
+  // Notice that middlewares below must be placed in this specific order. Explain why
+
   upload.single("image"),
-  (req, res) => {
+  [requireTitle, requirePrice],
+  async (req, res) => {
     const errors = validationResult(req);
 
-    console.log(req.file);
+    if (!errors.isEmpty()) {
+      return res.send(productsNewTemplate({ errors }));
+    }
+
+    const image = req.file.buffer.toString("base64");
+    const { title, price } = req.body;
+    await productsRepo.create({ title, price, image });
+    // .catch(err => {
+    //   console.error('Could not add product: ' + err)
+    // })
 
     res.send("submitted");
   }

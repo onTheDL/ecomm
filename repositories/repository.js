@@ -25,7 +25,7 @@ module.exports = class Repository {
     records.push(attrs);
     await this.writeAll(records);
 
-    return attrs
+    return attrs;
   }
 
   async getAll() {
@@ -34,6 +34,13 @@ module.exports = class Repository {
       await fs.promises.readFile(this.filename, {
         encoding: "utf8",
       })
+    );
+  }
+
+  async writeAll(records) {
+    await fs.promises.writeFile(
+      this.filename,
+      JSON.stringify(records, null, 2)
     );
   }
 
@@ -49,7 +56,10 @@ module.exports = class Repository {
   async delete(id) {
     const records = await this.getAll();
     const filteredRecords = records.filter((record) => record.id !== id);
-    await this.writeAll(filteredRecords);
+
+    await this.writeAll(filteredRecords).catch((err) =>
+      console.error("delete(): " + err)
+    );
   }
 
   async update(id, attrs) {
@@ -81,3 +91,4 @@ module.exports = class Repository {
     }
   }
 };
+
