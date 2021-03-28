@@ -1,5 +1,5 @@
 const express = require("express");
-const { handleErrors } = require("./middlewares")
+const { handleErrors } = require("./middlewares");
 
 const usersRepo = require("../../repositories/users");
 const signupTemplate = require("../../views/admin/auth/signup");
@@ -32,7 +32,7 @@ router.post(
     // Store the id of that user inside the user's cookie
     req.session.userId = user.id;
 
-    res.send("Account created!!");
+    res.redirect("/admin/products");
   }
 );
 
@@ -57,11 +57,10 @@ router.post(
     try {
       req.session.userId = user.id;
     } catch (err) {
-      res.send("Email not found")
+      res.send("Email not found");
     }
-    
 
-    res.send("You are signed in!");
+    res.redirect("/admin/products");
   }
 );
 

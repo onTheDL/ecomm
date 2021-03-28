@@ -32,11 +32,8 @@ router.post(
     const image = req.file.buffer.toString("base64");
     const { title, price } = req.body;
     await productsRepo.create({ title, price, image });
-    // .catch(err => {
-    //   console.error('Could not add product: ' + err)
-    // })
 
-    res.send("submitted");
+    res.redirect("/admin/products");
   }
 );
 
