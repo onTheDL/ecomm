@@ -4,6 +4,7 @@ const cookieSession = require("cookie-session"); // a middleware fxn
 const authedRouter = require("./routes/admin/auth");
 const adminProductsRouter = require("./routes/admin/products");
 const productsRouter = require("./routes/products");
+const cartsRouter = require("./routes/carts")
 
 // Describes what our web servers can do
 const app = express();
@@ -21,6 +22,7 @@ app.use(
 app.use(authedRouter);
 app.use(adminProductsRouter);
 app.use(productsRouter);
+app.use(cartsRouter)
 
 app.listen(3000, () => {
   console.log("Listening");
